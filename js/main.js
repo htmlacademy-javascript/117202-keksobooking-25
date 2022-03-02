@@ -23,7 +23,7 @@ const PICTYRE = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/k
 const ADS_LENGTH = 10;
 
 const greatAds = function () {
-  return {
+  const ad = {
     author : {
       avatar: `img/avatars/user${getRandomArrayElement(AVATAR_IMG)}.png`
     },
@@ -48,9 +48,9 @@ const greatAds = function () {
     },
 
   };
-
+  ad.offer.address = `${ad.location.lat} ${ad.location.lng}`;
+  return ad;
 };
-
 
 const randomAds = Array.from({length: ADS_LENGTH},greatAds);
 
