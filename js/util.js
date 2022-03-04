@@ -13,10 +13,4 @@ const getRandomNumber = function (a, b) {
 };
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-<<<<<<< HEAD
 export {getRandomNumberFloat,getRandomNumber,getRandomArrayElement};
-=======
-export {getRandomNumberFloat};
-export {getRandomNumber};
-export {getRandomArrayElement};
->>>>>>> 3393f12cd7a8da5d5fb0bc1b3c1680ecaf125ed7

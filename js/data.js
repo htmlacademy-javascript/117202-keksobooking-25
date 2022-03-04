@@ -1,10 +1,4 @@
-<<<<<<< HEAD
 import {getRandomNumberFloat,getRandomNumber,getRandomArrayElement} from './util.js';
-=======
-import {getRandomNumberFloat} from './util.js';
-import {getRandomNumber} from './util.js';
-import {getRandomArrayElement} from './util.js';
->>>>>>> 3393f12cd7a8da5d5fb0bc1b3c1680ecaf125ed7
 
 const AVATAR_IMG = ['01','02','03','04','05','06','07','08','09','10'];
 const TYPES = ['palace','flat','house','bungalow','hotel'];
