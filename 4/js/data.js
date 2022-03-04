@@ -1,6 +1,4 @@
-import {getRandomNumberFloat} from './util.js';
-import {getRandomNumber} from './util.js';
-import {getRandomArrayElement} from './util.js';
+import {getRandomNumberFloat,getRandomNumber,getRandomArrayElement} from './util.js';
 
 const AVATAR_IMG = ['01','02','03','04','05','06','07','08','09','10'];
 const TYPES = ['palace','flat','house','bungalow','hotel'];
