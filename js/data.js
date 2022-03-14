@@ -24,7 +24,7 @@ const greatAds = function () {
       checkout: getRandomArrayElement(CHECKOUTS),
       features: FEATURESS.slice(0,getRandomNumber(1,FEATURESS.length-1)),
       description: 'Описание объявления',
-      photos: PICTYRE.slice(0,getRandomNumber(1,PICTYRE.length-1))
+      photos: PICTYRE.slice(0,getRandomNumber(1,PICTYRE.length))
     },
 
     location : {
