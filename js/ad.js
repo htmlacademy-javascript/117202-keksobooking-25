@@ -27,9 +27,9 @@ const generatorAd = function({offer,author}) {
     adElement.querySelector('.popup__description').textContent = offer.description;}
   if (offer.photos !== undefined){
     const tamplateForm = adElement.querySelector('.popup__photos');
-    const tamplateTeg = tamplateForm.querySelector('img');
-    const cloneImage = tamplateTeg.cloneNode(true);
-    tamplateTeg.remove();
+    const tamplateTag = tamplateForm.querySelector('img');
+    const cloneImage = tamplateTag.cloneNode(true);
+    tamplateTag.remove();
     for (let i = 0; i <= offer.photos.length-1; i++){
       const newImage = cloneImage.cloneNode(true);
       newImage.src = offer.photos[i];
