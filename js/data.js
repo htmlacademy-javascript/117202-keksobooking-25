@@ -10,7 +10,7 @@ const PICTYRE = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/k
 const greatAds = function () {
   const ad = {
     author : {
-      avatar: `img/avatars/user${getRandomArrayElement(AVATAR_IMG)}.png`
+      avatar: `img/avatars/user${  getRandomArrayElement(AVATAR_IMG)  }.png`
     },
 
     offer : {
