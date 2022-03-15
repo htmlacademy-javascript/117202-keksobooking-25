@@ -1,7 +1,8 @@
 import {greatAds} from './data.js';
-
-const ADS_LENGTH = 10;
+import {generatorAd} from './ad.js';
+const ADS_LENGTH = 5;
 
 const randomAds = Array.from({length: ADS_LENGTH},greatAds);
 
-console.log(randomAds);
+
+generatorAd(randomAds[1]);

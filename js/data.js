@@ -10,7 +10,7 @@ const PICTYRE = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/k
 const greatAds = function () {
   const ad = {
     author : {
-      avatar: `img/avatars/user${getRandomArrayElement(AVATAR_IMG)}.png`
+      avatar: `img/avatars/user${  getRandomArrayElement(AVATAR_IMG)  }.png`
     },
 
     offer : {
@@ -24,7 +24,7 @@ const greatAds = function () {
       checkout: getRandomArrayElement(CHECKOUTS),
       features: FEATURESS.slice(0,getRandomNumber(1,FEATURESS.length-1)),
       description: 'Описание объявления',
-      photos: PICTYRE.slice(0,getRandomNumber(1,PICTYRE.length-1))
+      photos: PICTYRE.slice(0,getRandomNumber(1,PICTYRE.length))
     },
 
     location : {
