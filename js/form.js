@@ -1,20 +1,21 @@
 const adform = document.querySelector('.ad-form');
-const fieldset = document.querySelectorAll('.fieldset');
+const fieldset = adform.querySelectorAll('fieldset');
 const mapfilter = document.querySelector('.map__filters');
-const select = document.querySelectorAll('.select');
+const select = mapfilter.querySelectorAll('select');
 
 function inactiveState(){
   adform.classList.add('ad-form--disabled');
-  fieldset.setAttribute('disabled', 'disabled');
+  fieldset.forEach((it) =>  {it.disabled = true;});
   mapfilter.classList.add('map__filters--disabled');
-  select.setAttribute('disabled', 'disabled');
+  select.forEach((it) =>  {it.disabled = true;});
+
 }
 
 function activateState(){
   adform.classList.remove('ad-form--disabled');
-  fieldset.removeAttribute('disabled');
+  fieldset.forEach((it) =>  {it.disabled = false;});
   mapfilter.classList.remove('map__filters--disabled');
-  select.removeAttribute('disabled');
+  select.forEach((it) =>  {it.disabled = false;});
 }
 
 export {inactiveState,activateState};

@@ -10,3 +10,4 @@ generatorAd(randomAds[1]);
 console.log(inactiveState, activateState);
 
 inactiveState();
+activateState();
