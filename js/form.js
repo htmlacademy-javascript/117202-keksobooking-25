@@ -56,7 +56,8 @@ function getAmountErrorMessage () {
 pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 
 function onUnitChange () {
-  amountField.placeholder = minAmount[this.value];
+  amountField.value = minAmount[this.value];
+  amountField.min = minAmount[this.value];
   pristine.validate(amountField);
 }
 ADFORM.querySelectorAll('[name="type"]').forEach((item) => item.addEventListener('change', onUnitChange));
