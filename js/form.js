@@ -2,7 +2,7 @@ const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldsets');
 const MAPFILTER = document.querySelector('.map__filters');
 const SELECTS = MAPFILTER.querySelectorAll('selects');
-
+const type = ADFORM.querySelector('[name="type"]');
 
 function deactivateState(){
   ADFORM.classList.add('ad-form--disabled');
@@ -27,15 +27,14 @@ const pristine = new Pristine(ADFORM,{
   errorTextTag: 'span',
   errorTextClass: 'error__message--text' ,
 });
+
 function validateTitle (value) {
   return value.length >= 30 && value.length <= 100;
 }
-pristine.addValidator(
-  ADFORM.querySelector('#title'),
-  validateTitle,
-  'От 30 до 100 символов'
-);
-
+function validatePrice (value) {
+  return value.min >= 0 && value.max <= 100000;
+}
+pristine.addValidator(ADFORM.querySelector('#title'),validateTitle,'От 30 до 100 символов');
 
 const amountField = ADFORM.querySelector('#price');
 const minAmount = {
@@ -46,20 +45,18 @@ const minAmount = {
   'palace': 10000
 };
 function validateAmount (value) {
-  const type = ADFORM.querySelector('[name="type"]');
   return value.length && parseInt(value) >= minAmount[type.value];
 }
 function getAmountErrorMessage () {
-  const type = ADFORM.querySelector('[name="type"]');
   return `Не менее ${minAmount[type.value]} рублей`;
 }
-pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 
 function onUnitChange () {
-  amountField.value = minAmount[this.value];
+  amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
-  pristine.validate(amountField);
+  pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 }
+
 ADFORM.querySelectorAll('[name="type"]').forEach((item) => item.addEventListener('change', onUnitChange));
 
 const rooms = ADFORM.querySelector('[name="rooms"]');
