@@ -11,4 +11,4 @@ console.log(deactivateState, activateState);
 activateState();
 pristineStart();
 
-//Задание 8 часть 2
+//Задание 8 часть 2 попытка 2
