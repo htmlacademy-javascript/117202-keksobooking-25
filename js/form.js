@@ -30,6 +30,7 @@ const pristine = new Pristine(ADFORM,{
 });
 
 function validateTitle (value) {
+  TITLE_AD.style.border = '';
   return value.length >= 30 && value.length <= 100;
 }
 function errorValidateTitle (){
@@ -47,9 +48,9 @@ const minAmount = {
 };
 
 function validateAmount (value) {
-  if(parseInt(value) < 100000){
+  if(parseInt(value, 10) < 100000){
     amountField.style.border = '';
-    return parseInt(value) >= minAmount[type.value];}
+    return parseInt(value, 10) >= minAmount[type.value];}
 }
 function getAmountErrorMessage () {
   if(amountField.value < 100000){
@@ -93,13 +94,12 @@ function getDeliveryErrorMessage () {
 const timeInForm = ADFORM.querySelector('[name="timein"]');
 const timeOutForm = ADFORM.querySelector('[name="timeout"]');
 
-timeInForm.addEventListener('change', (evt) => {
+timeInForm.addEventListener('change', () => {
   timeOutForm.value = timeInForm.value;
 });
-timeOutForm.addEventListener('change', (evt) => {
+timeOutForm.addEventListener('change', () => {
   timeInForm.value = timeOutForm.value;
 });
-console.log(FIELDSETS);
 
 pristine.addValidator(capacitys, validateRoom, getDeliveryErrorMessage);
 const pristineStart = function (){
