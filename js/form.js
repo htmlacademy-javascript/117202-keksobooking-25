@@ -1,22 +1,23 @@
 const ADFORM = document.querySelector('.ad-form');
-const FIELDSETS = ADFORM.querySelectorAll('fieldsets');
+const FIELDSETS = ADFORM.querySelectorAll('fieldset');
 const MAPFILTER = document.querySelector('.map__filters');
-const SELECTS = MAPFILTER.querySelectorAll('selects');
+const SELECTS = MAPFILTER.querySelectorAll('select');
 const type = ADFORM.querySelector('[name="type"]');
-
+const amountField = ADFORM.querySelector('#price');
+const TITLE_AD = ADFORM.querySelector('#title');
 function deactivateState(){
   ADFORM.classList.add('ad-form--disabled');
   FIELDSETS.forEach((it) =>  {it.disabled = true;});
   MAPFILTER.classList.add('map__filters--disabled');
   SELECTS.forEach((it) =>  {it.disabled = true;});
-
 }
-
 function activateState(){
   ADFORM.classList.remove('ad-form--disabled');
   FIELDSETS.forEach((it) =>  {it.disabled = false;});
   MAPFILTER.classList.remove('map__filters--disabled');
   SELECTS.forEach((it) =>  {it.disabled = false;});
+  amountField.min = 1000;
+  amountField.max = 100000;
 }
 
 const pristine = new Pristine(ADFORM,{
@@ -31,12 +32,12 @@ const pristine = new Pristine(ADFORM,{
 function validateTitle (value) {
   return value.length >= 30 && value.length <= 100;
 }
-function validatePrice (value) {
-  return value.min >= 0 && value.max <= 100000;
+function errorValidateTitle (){
+  TITLE_AD.style.border = '2px solid red';
+  return 'От 30 до 100 символов';
 }
-pristine.addValidator(ADFORM.querySelector('#title'),validateTitle,'От 30 до 100 символов');
+pristine.addValidator(TITLE_AD,validateTitle,errorValidateTitle);
 
-const amountField = ADFORM.querySelector('#price');
 const minAmount = {
   'bungalow': 0,
   'flat': 1000,
@@ -44,17 +45,24 @@ const minAmount = {
   'house': 5000,
   'palace': 10000
 };
+
 function validateAmount (value) {
-  return value.length && parseInt(value) >= minAmount[type.value];
+  if(parseInt(value) < 100000){
+    amountField.style.border = '';
+    return parseInt(value) >= minAmount[type.value];}
 }
 function getAmountErrorMessage () {
-  return `Не менее ${minAmount[type.value]} рублей`;
+  if(amountField.value < 100000){
+    amountField.style.border = '2px solid red';
+    return `Не менее ${minAmount[type.value]} рублей`;}
+  amountField.style.border = '2px solid red';
+  return 'Не более 100000 рублей';
 }
-
+pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 function onUnitChange () {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
-  pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
+
 }
 
 ADFORM.querySelectorAll('[name="type"]').forEach((item) => item.addEventListener('change', onUnitChange));
@@ -69,13 +77,17 @@ const roomsOption = {
 };
 
 function validateRoom () {
+  capacitys.style.border = '';
   return roomsOption[rooms.value].includes(capacitys.value);
 }
 
 function getDeliveryErrorMessage () {
-  if (rooms.value !== '100' && capacitys.value !== '0'){return `для ${capacitys.value}-х гостей номер мал`;}
+  capacitys.style.border = '2px solid red';
+  if (rooms.value !== '100' && capacitys.value !== '0'){return `для ${capacitys.value}-х гостей необходимо ${capacitys.value} комнаты`;}
   if (rooms.value === '100'){return '100 комнат для гостей не доступно';}
   if (capacitys.value === '0'){return 'Без гостей доступно только 100 комнат';}
+  if(rooms.value === '2'){return 'для';}
+
 }
 
 const timeInForm = ADFORM.querySelector('[name="timein"]');
@@ -87,13 +99,15 @@ timeInForm.addEventListener('change', (evt) => {
 timeOutForm.addEventListener('change', (evt) => {
   timeInForm.value = timeOutForm.value;
 });
+console.log(FIELDSETS);
 
-pristine.addValidator(rooms, validateRoom, getDeliveryErrorMessage);
 pristine.addValidator(capacitys, validateRoom, getDeliveryErrorMessage);
 const pristineStart = function (){
   ADFORM.addEventListener('submit', (evt) => {
     evt.preventDefault();
     pristine.validate();
   });
+
 };
+
 export {deactivateState,activateState,pristineStart};
