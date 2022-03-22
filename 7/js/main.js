@@ -8,5 +8,5 @@ const randomAds = Array.from({length: ADS_LENGTH},greatAds);
 
 generatorAd(randomAds[1]);
 console.log(deactivateState, activateState);
-
+activateState();
 pristineStart();
