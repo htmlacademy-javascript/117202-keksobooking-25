@@ -10,3 +10,5 @@ generatorAd(randomAds[1]);
 console.log(deactivateState, activateState);
 activateState();
 pristineStart();
+
+//Задание 8 часть 2
