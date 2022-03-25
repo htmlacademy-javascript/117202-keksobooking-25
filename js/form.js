@@ -5,6 +5,7 @@ const SELECTS = MAPFILTER.querySelectorAll('select');
 const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
+const sliderElement = document.querySelector('.ad-form__slider');
 
 function deactivateState(){
   ADFORM.classList.add('ad-form--disabled');
@@ -60,12 +61,14 @@ function getAmountErrorMessage () {
   amountField.style.border = '2px solid red';
   return 'Не более 100000 рублей';
 }
+
+
 pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 function onUnitChange () {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
-
 }
+
 
 ADFORM.querySelectorAll('[name="type"]').forEach((item) => item.addEventListener('change', onUnitChange));
 
@@ -110,5 +113,39 @@ const pristineStart = function (){
   });
 
 };
+
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: 0,
+  step: 1000,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+const onUbdSlider = function(){
+  sliderElement.noUiSlider.on('update', () => {
+    amountField.value = sliderElement.noUiSlider.get();
+  });
+};
+amountField.addEventListener('change', function () {
+  sliderElement.noUiSlider.set(this.value);
+});
+
+amountField.addEventListener('click',onUbdSlider);
+sliderElement.addEventListener('click',onUbdSlider);
 
 export {deactivateState,activateState,pristineStart};
