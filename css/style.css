@@ -1053,3 +1053,5 @@ fieldset {
 .hidden {
   display: none;
 }
+
+#map { height: 180px; }

@@ -44,5 +44,5 @@ const generatorAd = function({offer,author}) {
 };
 
 
-export {generatorAd};
+export {generatorAd,adUser};
 

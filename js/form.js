@@ -5,6 +5,7 @@ const SELECTS = MAPFILTER.querySelectorAll('select');
 const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
+
 function deactivateState(){
   ADFORM.classList.add('ad-form--disabled');
   FIELDSETS.forEach((it) =>  {it.disabled = true;});
