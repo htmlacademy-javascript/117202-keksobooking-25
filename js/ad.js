@@ -40,9 +40,9 @@ const generatorAd = function({offer,author}) {
     const tamplateAvatar = adElement.querySelector('img');
     tamplateAvatar.src = author.avatar;
   }
-  document.querySelector('#map-canvas').appendChild(adElement);
+  return adElement;
 };
 
 
-export {generatorAd};
+export {generatorAd,adUser};
 
