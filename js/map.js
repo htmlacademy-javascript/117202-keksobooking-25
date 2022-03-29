@@ -1,11 +1,21 @@
 import {generatorAd} from './ad.js';
-
+import { deactivateState,activateState} from './form.js';
+import {createLoader} from './server_data.js';
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
 
+
 adress.value = '35.75330,139.63690';
+
+const newMarker = function (it){
+  const {lat,lng} = it.location;
+  const marker = L.marker({lat,lng},{icon});
+  marker.addTo(map).bindPopup(generatorAd(it));
+};
+const dataMap = createLoader(newMarker,deactivateState);
 const map = L.map('map-canvas').on('load', () => {
+  dataMap();
 }).setView({lat: 35.7533,lng: 139.6369,}, 10);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
@@ -41,11 +51,6 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const newMarker = function (it){
-  const {lat,lng} = it.location;
-  const marker = L.marker({lat,lng},{icon});
-  marker.addTo(map).bindPopup(generatorAd(it));
-};
 
 mainPinMarker.addTo(map);
 

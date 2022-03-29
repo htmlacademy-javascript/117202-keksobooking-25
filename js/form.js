@@ -69,12 +69,13 @@ pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 function onUnitChange () {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
-  sliderElement.noUiSlider.options.start = minAmount[this.value];
-  sliderElement.noUiSlider.options.range.min = minAmount[this.value];
+  if (sliderElement) {
+    sliderElement.noUiSlider.options.start = minAmount[this.value];
+    sliderElement.noUiSlider.options.range.min = minAmount[this.value];}
 }
 
 
-ADFORM.querySelectorAll('[name="type"]').forEach((item) => item.addEventListener('change', onUnitChange));
+ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
 
 const rooms = ADFORM.querySelector('[name="rooms"]');
 const capacitys = ADFORM.querySelector('[name="capacity"]');

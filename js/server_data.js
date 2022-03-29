@@ -1,4 +1,4 @@
-import {newMarker} from './map.js';
+
 import {showAlert} from './util.js';
 
 const createLoader = (onSuccess,onError) => () => fetch(
@@ -16,14 +16,11 @@ const createLoader = (onSuccess,onError) => () => fetch(
   })
   .then((it) => {
     it.forEach((element) => {
-      newMarker(element);
+      onSuccess(element);
     });})
-    .catch(() => {
-      showAlert('Обновите страницу');
-      onError();
-    })
-  .then(() => {
-    onSuccess();
+  .catch(() => {
+    showAlert('Обновите страницу');
+    onError();
   });
 
 export {createLoader};
