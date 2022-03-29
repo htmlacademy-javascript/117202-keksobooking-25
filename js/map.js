@@ -1,13 +1,10 @@
 import {generatorAd} from './ad.js';
-import {greatAds} from './data.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
-const ADS_LENGTH = 10;
 
-const randomAds = Array.from({length: ADS_LENGTH},greatAds);
-
+adress.value = '35.75330,139.63690';
 const map = L.map('map-canvas').on('load', () => {
 }).setView({lat: 35.7533,lng: 139.6369,}, 10);
 
@@ -24,7 +21,7 @@ mainPinMarker.on('moveend', (evt) => {
   adress.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
 });
 
-resetButton.addEventListener('click', () => {
+const resetPage = function() {
   mainPinMarker.setLatLng({
     lat: 35.7533,
     lng: 139.6369,
@@ -33,6 +30,10 @@ resetButton.addEventListener('click', () => {
     lat: 35.7533,
     lng: 139.6369,
   }, 10);
+
+};
+resetButton.addEventListener('click', () => {
+  resetPage();
 });
 const icon = L.icon({
   iconUrl: './img/pin.svg',
@@ -40,11 +41,12 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-
-randomAds.forEach((it) => {
+const newMarker = function (it){
   const {lat,lng} = it.location;
   const marker = L.marker({lat,lng},{icon});
   marker.addTo(map).bindPopup(generatorAd(it));
-});
+};
+
 mainPinMarker.addTo(map);
-export {map,mainPinMarker};
+
+export {map,mainPinMarker,newMarker,resetPage};

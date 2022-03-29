@@ -1,3 +1,5 @@
+import {resetPage} from './map.js';
+
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
 const MAPFILTER = document.querySelector('.map__filters');
@@ -67,6 +69,8 @@ pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
 function onUnitChange () {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
+  sliderElement.noUiSlider.options.start = minAmount[this.value];
+  sliderElement.noUiSlider.options.range.min = minAmount[this.value];
 }
 
 
@@ -106,13 +110,29 @@ timeOutForm.addEventListener('change', () => {
 });
 
 pristine.addValidator(capacitys, validateRoom, getDeliveryErrorMessage);
-const pristineStart = function (){
+
+const pristinStart = function(onSuccess,onError) {
   ADFORM.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    pristine.validate();
-  });
 
-};
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+
+      fetch('https://25.javascript.pages.academ/keksobooking',
+        {method: 'POST',
+          body: formData,
+        },
+      ).then((response) => {
+        if (response.ok) {
+          onSuccess();
+          ADFORM.reset();
+          resetPage();}
+        else{
+          onError();
+        }}
+      ).catch(() => onError());
+    }});};
 
 
 noUiSlider.create(sliderElement, {
@@ -148,4 +168,5 @@ amountField.addEventListener('change', function () {
 amountField.addEventListener('click',onUbdSlider);
 sliderElement.addEventListener('click',onUbdSlider);
 
-export {deactivateState,activateState,pristineStart};
+
+export {deactivateState,activateState,pristinStart};
