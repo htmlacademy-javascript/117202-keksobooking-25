@@ -8,21 +8,36 @@ const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
+const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
+const submitButton = ADFORM.querySelector('.ad-form__submit');
 
-function deactivateState(){
-  ADFORM.classList.add('ad-form--disabled');
-  FIELDSETS.forEach((it) =>  {it.disabled = true;});
+const deactivateFilter = function(){
   MAPFILTER.classList.add('map__filters--disabled');
   SELECTS.forEach((it) =>  {it.disabled = true;});
-}
-function activateState(){
+};
+const deactivateState = function(){
+  ADFORM.classList.add('ad-form--disabled');
+  FIELDSETS.forEach((it) =>  {it.disabled = true;});
+  deactivateFilter();
+};
+
+const blockSubmitButton = function () {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = function () {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+const activateState = function(){
   ADFORM.classList.remove('ad-form--disabled');
   FIELDSETS.forEach((it) =>  {it.disabled = false;});
   MAPFILTER.classList.remove('map__filters--disabled');
   SELECTS.forEach((it) =>  {it.disabled = false;});
   amountField.min = 1000;
   amountField.max = 100000;
-}
+};
 
 const pristine = new Pristine(ADFORM,{
   classTo: 'ad-form__element' ,
@@ -33,14 +48,14 @@ const pristine = new Pristine(ADFORM,{
   errorTextClass: 'error__message--text' ,
 });
 
-function validateTitle (value) {
+const validateTitle = function (value) {
   TITLE_AD.style.border = '';
   return value.length >= 30 && value.length <= 100;
-}
-function errorValidateTitle (){
+};
+const errorValidateTitle = function (){
   TITLE_AD.style.border = '2px solid red';
   return 'От 30 до 100 символов';
-}
+};
 pristine.addValidator(TITLE_AD,validateTitle,errorValidateTitle);
 
 const minAmount = {
@@ -51,28 +66,31 @@ const minAmount = {
   'palace': 10000
 };
 
-function validateAmount (value) {
+const validateAmount = function (value) {
   if(parseInt(value, 10) < 100000){
     amountField.style.border = '';
     return parseInt(value, 10) >= minAmount[type.value];}
-}
-function getAmountErrorMessage () {
+};
+const getAmountErrorMessage = function () {
   if(amountField.value < 100000){
     amountField.style.border = '2px solid red';
     return `Не менее ${minAmount[type.value]} рублей`;}
   amountField.style.border = '2px solid red';
   return 'Не более 100000 рублей';
-}
+};
 
 
 pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
-function onUnitChange () {
+const onUnitChange = function () {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
   if (sliderElement) {
-    sliderElement.noUiSlider.options.start = minAmount[this.value];
-    sliderElement.noUiSlider.options.range.min = minAmount[this.value];}
-}
+    const options = {
+      range: { min: minAmount[this.value], max:100000}, step: 100
+    };
+
+    sliderElement.noUiSlider.updateOptions(options);}
+};
 
 
 ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
@@ -86,19 +104,19 @@ const roomsOption = {
   '100': ['0']
 };
 
-function validateRoom () {
+const validateRoom = function () {
   capacitys.style.border = '';
   return roomsOption[rooms.value].includes(capacitys.value);
-}
+};
 
-function getDeliveryErrorMessage () {
+const getDeliveryErrorMessage = function () {
   capacitys.style.border = '2px solid red';
   if (rooms.value !== '100' && capacitys.value !== '0'){return `для ${capacitys.value}-х гостей необходимо ${capacitys.value} комнаты`;}
   if (rooms.value === '100'){return '100 комнат для гостей не доступно';}
   if (capacitys.value === '0'){return 'Без гостей доступно только 100 комнат';}
   if(rooms.value === '2'){return 'для';}
 
-}
+};
 
 const timeInForm = ADFORM.querySelector('[name="timein"]');
 const timeOutForm = ADFORM.querySelector('[name="timeout"]');
@@ -118,9 +136,9 @@ const pristinStart = function(onSuccess,onError) {
 
     const isValid = pristine.validate();
     if (isValid) {
+      blockSubmitButton();
       const formData = new FormData(evt.target);
-
-      fetch('https://25.javascript.pages.academ/keksobooking',
+      fetch(URL_POST,
         {method: 'POST',
           body: formData,
         },
@@ -128,11 +146,16 @@ const pristinStart = function(onSuccess,onError) {
         if (response.ok) {
           onSuccess();
           ADFORM.reset();
-          resetPage();}
+          resetPage();
+          unblockSubmitButton();}
         else{
           onError();
+          unblockSubmitButton();
         }}
-      ).catch(() => onError());
+      ).catch(() => {
+        unblockSubmitButton();
+        onError();
+      });
     }});};
 
 
@@ -166,8 +189,8 @@ amountField.addEventListener('change', function () {
   sliderElement.noUiSlider.set(this.value);
 });
 
-amountField.addEventListener('click',onUbdSlider);
+
 sliderElement.addEventListener('click',onUbdSlider);
 
 
-export {deactivateState,activateState,pristinStart};
+export {deactivateState,activateState,pristinStart,deactivateFilter};

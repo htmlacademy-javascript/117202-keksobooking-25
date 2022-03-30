@@ -1,7 +1,7 @@
 const ALERT_SHOW_TIME = 5000;
 const messageFragment = document.querySelector('body');
 
-const showAlert = (message) => {
+const showAlert = function (message) {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';

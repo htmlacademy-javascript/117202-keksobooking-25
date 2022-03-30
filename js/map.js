@@ -1,20 +1,25 @@
 import {generatorAd} from './ad.js';
-import { deactivateState,activateState} from './form.js';
-import {createLoader} from './server_data.js';
+import { deactivateState,activateState,deactivateFilter} from './form.js';
+import {createLoader} from './server-data.js';
+import {showAlert} from './util.js';
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
 
-
+const onError = function (){
+  showAlert('Ошибка сервера, перезагрузите страницу');
+  deactivateFilter();
+};
 adress.value = '35.75330,139.63690';
-
+deactivateState();
 const newMarker = function (it){
   const {lat,lng} = it.location;
   const marker = L.marker({lat,lng},{icon});
   marker.addTo(map).bindPopup(generatorAd(it));
 };
-const dataMap = createLoader(newMarker,deactivateState);
+const dataMap = createLoader(newMarker,onError);
 const map = L.map('map-canvas').on('load', () => {
+  activateState();
   dataMap();
 }).setView({lat: 35.7533,lng: 139.6369,}, 10);
 

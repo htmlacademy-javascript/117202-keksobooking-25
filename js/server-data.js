@@ -1,8 +1,8 @@
 
-import {showAlert} from './util.js';
+const URL_GET = 'https://25.javascript.pages.academ/keksobooking/data';
 
 const createLoader = (onSuccess,onError) => () => fetch(
-  'https://25.javascript.pages.academy/keksobooking/data',
+  URL_GET,
   {
     method: 'GET',
     credentials: 'same-origin',
@@ -19,7 +19,6 @@ const createLoader = (onSuccess,onError) => () => fetch(
       onSuccess(element);
     });})
   .catch(() => {
-    showAlert('Обновите страницу');
     onError();
   });
 
