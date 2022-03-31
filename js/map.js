@@ -1,14 +1,26 @@
 import {generatorAd} from './ad.js';
-import {greatAds} from './data.js';
-
+import { deactivateState,activateState,deactivateFilter} from './form.js';
+import {createLoader} from './server-data.js';
+import {showAlert} from './util.js';
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
-const ADS_LENGTH = 10;
 
-const randomAds = Array.from({length: ADS_LENGTH},greatAds);
-
+const onError = function (){
+  showAlert('Ошибка сервера, перезагрузите страницу');
+  deactivateFilter();
+};
+adress.value = '35.75330,139.63690';
+deactivateState();
+const newMarker = function (it){
+  const {lat,lng} = it.location;
+  const marker = L.marker({lat,lng},{icon});
+  marker.addTo(map).bindPopup(generatorAd(it));
+};
+const dataMap = createLoader(newMarker,onError);
 const map = L.map('map-canvas').on('load', () => {
+  activateState();
+  dataMap();
 }).setView({lat: 35.7533,lng: 139.6369,}, 10);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
@@ -24,7 +36,7 @@ mainPinMarker.on('moveend', (evt) => {
   adress.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
 });
 
-resetButton.addEventListener('click', () => {
+const resetPage = function() {
   mainPinMarker.setLatLng({
     lat: 35.7533,
     lng: 139.6369,
@@ -33,6 +45,10 @@ resetButton.addEventListener('click', () => {
     lat: 35.7533,
     lng: 139.6369,
   }, 10);
+
+};
+resetButton.addEventListener('click', () => {
+  resetPage();
 });
 const icon = L.icon({
   iconUrl: './img/pin.svg',
@@ -41,10 +57,6 @@ const icon = L.icon({
 });
 
 
-randomAds.forEach((it) => {
-  const {lat,lng} = it.location;
-  const marker = L.marker({lat,lng},{icon});
-  marker.addTo(map).bindPopup(generatorAd(it));
-});
 mainPinMarker.addTo(map);
-export {map,mainPinMarker};
+
+export {map,mainPinMarker,newMarker,resetPage};

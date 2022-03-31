@@ -1,6 +1,8 @@
 
-import {pristineStart} from './form.js';
 import './map.js';
+import {pristinStart} from './form.js';
+import {showSuccessMessage,showErrorMessage} from './util.js';
 
 
-pristineStart();
+pristinStart(showSuccessMessage,showErrorMessage);
+
