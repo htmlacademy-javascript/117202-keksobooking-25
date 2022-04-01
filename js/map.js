@@ -12,18 +12,12 @@ const onError = function (){
 };
 adress.value = '35.75330,139.63690';
 deactivateState();
+
 const newMarker = function (it){
   const {lat,lng} = it.location;
   const marker = L.marker({lat,lng},{icon});
-  marker.addTo(map).bindPopup(generatorAd(it));
+  marker.addTo(markerGroup).bindPopup(generatorAd(it));
 };
-const dataMap = createLoader(newMarker,onError);
-const map = L.map('map-canvas').on('load', () => {
-  activateState();
-  dataMap();
-}).setView({lat: 35.7533,lng: 139.6369,}, 10);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -57,6 +51,15 @@ const icon = L.icon({
 });
 
 
+const workData = function(it){
+  it.forEach((item) => newMarker(item));
+};
+const dataMap = createLoader(workData,onError);
+const map = L.map('map-canvas').on('load', () => {
+  activateState();
+  dataMap();
+}).setView({lat: 35.7533,lng: 139.6369,}, 10);
 mainPinMarker.addTo(map);
-
-export {map,mainPinMarker,newMarker,resetPage};
+const markerGroup = L.layerGroup().addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+export {newMarker,resetPage,markerGroup,workData};

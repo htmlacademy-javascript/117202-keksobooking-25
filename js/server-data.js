@@ -1,5 +1,6 @@
 
-const URL_GET = 'https://25.javascript.pages.academ/keksobooking/data';
+//import {valueData} from './map-filter.js';
+const URL_GET = 'https://25.javascript.pages.academy/keksobooking/data';
 
 const createLoader = (onSuccess,onError) => () => fetch(
   URL_GET,
@@ -13,11 +14,8 @@ const createLoader = (onSuccess,onError) => () => fetch(
       return response.json();
     }
     throw new Error('Ошибка загрузки');
-  })
-  .then((it) => {
-    it.forEach((element) => {
-      onSuccess(element);
-    });})
+  }).then((it) => {
+    onSuccess(it);})
   .catch(() => {
     onError();
   });
