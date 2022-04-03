@@ -6,7 +6,6 @@ const transliteHome = {
   hotel: 'Отель',
 };
 const adUser = document.querySelector('#card').content.querySelector('article');
-const box = [];
 const generatorAd = function({offer,author}) {
   const adElement = adUser.cloneNode(true);
   adElement.querySelector('.popup__title').textContent = offer.title;

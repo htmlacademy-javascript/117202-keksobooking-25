@@ -6,7 +6,8 @@ const housingPrice = allFilters.querySelector('#housing-price');
 const roomsNumber = allFilters.querySelector('#housing-rooms');
 const guestNumber = allFilters.querySelector('#housing-guests');
 const featuresFieldset = allFilters.querySelector('#housing-features');
-const checkedFeaturesItems = featuresFieldset.querySelectorAll('input :checked');
+
+
 const RERENDER_DELAY = 500;
 const debounce = function (callback, timeoutDelay = 500) {
   let timeoutId;
@@ -48,18 +49,17 @@ const guest = function(it){
   return(guestNumber.value === it.offer.guests.toString());
 };
 
-const features = function(it){
-  Array.from(checkedFeaturesItems);
-  console.log(Array.from(checkedFeaturesItems));
-  Array.from(checkedFeaturesItems).every(function(elem) { return it.offer.features.includes(elem.value)});
-
+const features = function(it,checkedFeaturesItems){
+  Array.from(checkedFeaturesItems).every((elem) => it.offer.features.includes(elem.value));
 };
 
 const newMarkerFilter = function (it){
   const result = [];
+  const checkedFeaturesItems = featuresFieldset.querySelectorAll('input:checked');
+  
+  console.log(checkedFeaturesItems);
   for(let i =0;i < it.length;i++){
-    if(type(it[i]) === true && price(it[i]) === true && rooms(it[i]) === true && guest(it[i]) === true && features(it[i]) === true){
-
+    if(type(it[i]) === true && price(it[i]) === true && rooms(it[i]) === true && guest(it[i]) === true && features(it[i],checkedFeaturesItems)){
       result.push(it[i]);
     }
     if (result.length >=10) {
@@ -72,10 +72,11 @@ const newMarkerFilter = function (it){
     newMarker(element);
   });};
 const dataFilterMap = createLoader(newMarkerFilter,onError);
-const clear = function(){
-  debounce(markerGroup.clearLayers(),RERENDER_DELAY);
+let clear = function(){
+  markerGroup.clearLayers();
   dataFilterMap();
 };
+clear = debounce(clear,RERENDER_DELAY);
 
-housingType.addEventListener('change',newMarkerFilter);
 allFilters.addEventListener('change',clear);
+
