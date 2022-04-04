@@ -1,5 +1,3 @@
-
-//import {valueData} from './map-filter.js';
 const URL_GET = 'https://25.javascript.pages.academy/keksobooking/data';
 
 const createLoader = (onSuccess,onError) => () => fetch(

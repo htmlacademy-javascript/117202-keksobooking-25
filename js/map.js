@@ -1,13 +1,14 @@
 import {generatorAd} from './ad.js';
-import { deactivateState,activateState,deactivateFilter} from './form.js';
+import { deactivateState,activateState,deactivateFilter,resetOption} from './form.js';
 import {createLoader} from './server-data.js';
 import {showAlert} from './util.js';
-import {clear} from './map-filter.js';
+import {cleanOut} from './map-filter.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
 const allFilters = document.querySelector('.map__filters');
+const sliderElement = document.querySelector('.ad-form__slider');
 
 const onError = function (){
   showAlert('Ошибка сервера, перезагрузите страницу');
@@ -44,13 +45,9 @@ const resetPage = function() {
     lat: 35.6827,
     lng: 139.7516,
   }, 10);
+  resetOption();
+  useAdress();
 };
-
-resetButton.addEventListener('click', () => {
-  resetPage();
-  allFilters.reset();
-  clear();
-});
 
 const icon = L.icon({
   iconUrl: './img/pin.svg',
@@ -58,15 +55,14 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-
-const workData = function(it){
+const downloadInformation = function(it){
   for(let i=0;i<10;i++){
     newMarker(it[i]);
   }
   useAdress();
 };
 
-const dataMap = createLoader(workData,onError);
+const dataMap = createLoader(downloadInformation,onError);
 const map = L.map('map-canvas').on('load', () => {
   activateState();
   dataMap();
@@ -75,4 +71,13 @@ mainPinMarker.addTo(map);
 const markerGroup = L.layerGroup().addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-export {newMarker,resetPage,markerGroup,workData,useAdress};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetPage();
+  allFilters.reset();
+  cleanOut();
+  adress.value = '35.75330,139.63690';
+});
+
+export {newMarker,resetPage,markerGroup,downloadInformation,useAdress};

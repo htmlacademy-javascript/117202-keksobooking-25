@@ -1,7 +1,7 @@
 import {resetPage,useAdress} from './map.js';
 import {showSuccessMessage,showErrorMessage} from './util.js';
-import './photo-ad.js';
-
+import './map-filter.js';
+import {photoReset} from './photo-ad.js';
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
 const MAPFILTER = document.querySelector('.map__filters');
@@ -10,9 +10,8 @@ const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
-const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
+const URL_POST = 'https://25.javascript.pages.academ/keksobooking';
 const submitButton = ADFORM.querySelector('.ad-form__submit');
-
 
 const deactivateFilter = function(){
   MAPFILTER.classList.add('map__filters--disabled');
@@ -89,12 +88,19 @@ const onUnitChange = function () {
   amountField.min = minAmount[this.value];
   if (sliderElement) {
     const options = {
-      range: { min: minAmount[this.value], max:100000}, step: 100
+      range: { min: 0, max:100000}, step: 100
     };
 
     sliderElement.noUiSlider.updateOptions(options);}
 };
-
+const resetOption = function(){
+  ADFORM.reset();
+  const options = {
+    range: { min: 1000, max:100000}, step: 100,start: 1000
+  };
+  sliderElement.noUiSlider.updateOptions(options);
+  photoReset();
+};
 
 ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
 
@@ -155,7 +161,7 @@ const pristinStart = function(onSuccess,onError) {
           onError();
           unblockSubmitButton();
         }}
-      ).then(()=> useAdress()).catch(() => {
+      ).catch(() => {
         unblockSubmitButton();
         onError();
       });
@@ -197,4 +203,4 @@ amountField.addEventListener('change', function () {
 sliderElement.addEventListener('click',onUbdSlider);
 
 
-export {deactivateState,activateState,pristinStart,deactivateFilter};
+export {deactivateState,activateState,pristinStart,deactivateFilter,resetOption};

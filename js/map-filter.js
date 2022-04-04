@@ -22,10 +22,10 @@ const onError = function(){
   return 'ошибка';
 };
 
-const type = function(it) {
+const checkType = function(it) {
   return it.offer.type === housingType.value || housingType.value === 'any';
 };
-const price = function(it){
+const checkPrice = function(it){
   if(housingPrice.value === 'middle'){
     return it.offer.price < 50000 && it.offer.price > 10000;
   }
@@ -37,10 +37,10 @@ const price = function(it){
   }
   return true;
 };
-const rooms = function(it) {
+const checkRooms = function(it) {
   return (roomsNumber.value === it.offer.rooms.toString() || roomsNumber.value === 'any');
 };
-const guest = function(it){
+const checkGuest = function(it){
   if(guestNumber.value === 0){
     return it.offer.guests.toString() === 100;
   }
@@ -50,17 +50,21 @@ const guest = function(it){
   return(guestNumber.value === it.offer.guests.toString());
 };
 
-const features = function (it, checkedFeaturesItems) {
+const checkFeatures = function (it, checkedFeaturesItems) {
   let featuresIn = true;
-  //    return (Array.from(checkedFeaturesItems).every((elem) => {return it.offer.features.includes(elem.value)})
+  if (checkedFeaturesItems.length === 0) {
+    return featuresIn;
+  }
   const arrayFeaturesItems = Array.from(checkedFeaturesItems);
-  for (let i = 0; i < arrayFeaturesItems.length; i++) {
-
-    if (!(it.offer.features.includes(arrayFeaturesItems[i].value))) {
-      featuresIn = false;
-      break;
+  if (it.offer.features) {
+    for (let i = 0; i < arrayFeaturesItems.length; i++) {
+      if (!(it.offer.features.includes(arrayFeaturesItems[i].value))) {
+        featuresIn = false;
+        break;
+      }
     }
-
+  } else {
+    featuresIn = false;
   }
   return featuresIn;
 };
@@ -69,13 +73,9 @@ const newMarkerFilter = function (it) {
   const result = [];
   const checkedFeaturesItems = featuresFieldset.querySelectorAll('input:checked');
   for (let i = 0; i < it.length; i++) {
-    const a = type(it[i]);
-    const b = price(it[i]);
-    const c = rooms(it[i]);
-    const d = guest(it[i]);
-    if (a && b && c && d) {
+    if (checkType(it[i]) && checkPrice(it[i]) && checkRooms(it[i]) && checkGuest(it[i])) {
       if (it[i].offer.features) {
-        if (features(it[i], checkedFeaturesItems)) {
+        if (checkFeatures(it[i], checkedFeaturesItems)) {
           result.push(it[i]);
         }
       }
@@ -90,13 +90,13 @@ const newMarkerFilter = function (it) {
   });};
 const dataFilterMap = createLoader(newMarkerFilter,onError);
 
-let clear = function(){
+let cleanOut = function(){
   markerGroup.clearLayers();
   dataFilterMap();
 };
-clear = debounce(clear,RERENDER_DELAY);
+cleanOut = debounce(cleanOut,RERENDER_DELAY);
 
-allFilters.addEventListener('change',clear);
-export{clear};
+allFilters.addEventListener('change',cleanOut);
+export{cleanOut};
 
 
