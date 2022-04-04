@@ -1,4 +1,6 @@
-import {resetPage} from './map.js';
+import {resetPage,useAdress} from './map.js';
+import {showSuccessMessage,showErrorMessage} from './util.js';
+import './photo-ad.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
@@ -10,6 +12,7 @@ const TITLE_AD = ADFORM.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
 const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
 const submitButton = ADFORM.querySelector('.ad-form__submit');
+
 
 const deactivateFilter = function(){
   MAPFILTER.classList.add('map__filters--disabled');
@@ -152,12 +155,13 @@ const pristinStart = function(onSuccess,onError) {
           onError();
           unblockSubmitButton();
         }}
-      ).catch(() => {
+      ).then(()=> useAdress()).catch(() => {
         unblockSubmitButton();
         onError();
       });
     }});};
 
+pristinStart(showSuccessMessage,showErrorMessage);
 
 noUiSlider.create(sliderElement, {
   range: {

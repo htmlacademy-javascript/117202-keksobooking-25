@@ -1,5 +1,6 @@
 import {markerGroup,newMarker} from './map.js';
 import { createLoader } from './server-data.js';
+
 const allFilters = document.querySelector('.map__filters');
 const housingType = allFilters.querySelector('#housing-type');
 const housingPrice = allFilters.querySelector('#housing-price');
@@ -49,29 +50,46 @@ const guest = function(it){
   return(guestNumber.value === it.offer.guests.toString());
 };
 
-const features = function(it,checkedFeaturesItems){
-  Array.from(checkedFeaturesItems).every((elem) => it.offer.features.includes(elem.value));
-};
+const features = function (it, checkedFeaturesItems) {
+  let featuresIn = true;
+  //    return (Array.from(checkedFeaturesItems).every((elem) => {return it.offer.features.includes(elem.value)})
+  const arrayFeaturesItems = Array.from(checkedFeaturesItems);
+  for (let i = 0; i < arrayFeaturesItems.length; i++) {
 
-const newMarkerFilter = function (it){
-  const result = [];
-  const checkedFeaturesItems = featuresFieldset.querySelectorAll('input:checked');
-  
-  console.log(checkedFeaturesItems);
-  for(let i =0;i < it.length;i++){
-    if(type(it[i]) === true && price(it[i]) === true && rooms(it[i]) === true && guest(it[i]) === true && features(it[i],checkedFeaturesItems)){
-      result.push(it[i]);
-    }
-    if (result.length >=10) {
+    if (!(it.offer.features.includes(arrayFeaturesItems[i].value))) {
+      featuresIn = false;
       break;
     }
 
+  }
+  return featuresIn;
+};
+
+const newMarkerFilter = function (it) {
+  const result = [];
+  const checkedFeaturesItems = featuresFieldset.querySelectorAll('input:checked');
+  for (let i = 0; i < it.length; i++) {
+    const a = type(it[i]);
+    const b = price(it[i]);
+    const c = rooms(it[i]);
+    const d = guest(it[i]);
+    if (a && b && c && d) {
+      if (it[i].offer.features) {
+        if (features(it[i], checkedFeaturesItems)) {
+          result.push(it[i]);
+        }
+      }
+    }
+    if (result.length >= 10) {
+      break;
+    }
   }
 
   result.forEach((element) => {
     newMarker(element);
   });};
 const dataFilterMap = createLoader(newMarkerFilter,onError);
+
 let clear = function(){
   markerGroup.clearLayers();
   dataFilterMap();
@@ -79,4 +97,6 @@ let clear = function(){
 clear = debounce(clear,RERENDER_DELAY);
 
 allFilters.addEventListener('change',clear);
+export{clear};
+
 
