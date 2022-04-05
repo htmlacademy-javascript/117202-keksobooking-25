@@ -1,4 +1,7 @@
 import {resetPage} from './map.js';
+import {showSuccessMessage,showErrorMessage} from './util.js';
+import './map-filter.js';
+import './photo-ad.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
@@ -86,12 +89,17 @@ const onUnitChange = function () {
   amountField.min = minAmount[this.value];
   if (sliderElement) {
     const options = {
-      range: { min: minAmount[this.value], max:100000}, step: 100
+      range: { min: 0, max:100000}, step: 100
     };
 
     sliderElement.noUiSlider.updateOptions(options);}
 };
-
+const resetOptionSlider = function(){
+  const options = {
+    range: { min: 1000, max:100000}, step: 100,start: 1000
+  };
+  sliderElement.noUiSlider.updateOptions(options);
+};
 
 ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
 
@@ -158,6 +166,7 @@ const pristinStart = function(onSuccess,onError) {
       });
     }});};
 
+pristinStart(showSuccessMessage,showErrorMessage);
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -193,4 +202,4 @@ amountField.addEventListener('change', function () {
 sliderElement.addEventListener('click',onUbdSlider);
 
 
-export {deactivateState,activateState,pristinStart,deactivateFilter};
+export {deactivateState,activateState,pristinStart,deactivateFilter,resetOptionSlider};

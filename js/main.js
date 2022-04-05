@@ -1,8 +1,5 @@
 
 import './map.js';
-import {pristinStart} from './form.js';
-import {showSuccessMessage,showErrorMessage} from './util.js';
+import './form.js';
 
-
-pristinStart(showSuccessMessage,showErrorMessage);
 

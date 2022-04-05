@@ -31,8 +31,6 @@ const closePopup = () => {
   if (document.querySelector('.error')) {
     document.querySelector('.error').remove();
   }
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  document.removeEventListener('keydown', onPopupClick);
 };
 
 const onPopupEscKeydown = (evt) => {
@@ -40,10 +38,12 @@ const onPopupEscKeydown = (evt) => {
     evt.preventDefault();
     closePopup();
   }
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 const onPopupClick = () => {
   closePopup();
+  document.removeEventListener('keydown', onPopupClick);
 };
 
 const showSuccessMessage = () => {
@@ -66,4 +66,6 @@ const showErrorMessage = (message) => {
   document.addEventListener('keydown', onPopupEscKeydown);
   document.addEventListener('click', closePopup);
 };
+
+
 export {showAlert,showSuccessMessage,showErrorMessage};
