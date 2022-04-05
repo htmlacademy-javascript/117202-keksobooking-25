@@ -3,6 +3,8 @@ const preview = document.querySelector('.ad-form-header__preview img');
 const fileChooserAd = document.querySelector('.ad-form__upload input[type="file"]');
 const previewAd = document.querySelector('.ad-form__photo');
 const maffinPhoto = 'img/muffin-grey.svg';
+const submitButton = document.querySelector('.ad-form__submit');
+const resetButton = document.querySelector('.ad-form__reset');
 
 fileChooserAvatar.addEventListener('change', () => {
   const file = fileChooserAvatar.files[0];
@@ -14,12 +16,12 @@ fileChooserAd.addEventListener('change', () => {
   previewAd.insertAdjacentHTML('beforeend', '<img width="70" height="70"></img>');
   const previewAdImg = document.querySelector('.ad-form__photo img');
   previewAdImg.src = URL.createObjectURL(fileAd);
+  submitButton.addEventListener('click', ()=>{
+    previewAdImg.remove();
+    preview.src = maffinPhoto;
+  });
+  resetButton.addEventListener('click', ()=>{
+    previewAdImg.remove();
+    preview.src = maffinPhoto;
+  });
 });
-
-const photoReset = function (){
-  const previewAdImg = document.querySelector('.ad-form__photo img');
-  previewAdImg.remove();
-  preview.src = maffinPhoto;
-};
-
-export {photoReset};

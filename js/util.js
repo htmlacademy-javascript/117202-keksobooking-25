@@ -1,5 +1,3 @@
-import {newMarker} from './map.js';
-
 const ALERT_SHOW_TIME = 5000;
 const messageFragment = document.querySelector('body');
 
@@ -39,8 +37,8 @@ const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
     closePopup();
-    document.removeEventListener('keydown', onPopupEscKeydown);
   }
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 const onPopupClick = () => {
@@ -69,10 +67,5 @@ const showErrorMessage = (message) => {
   document.addEventListener('click', closePopup);
 };
 
-const downloadInformation = function(it){
-  for(let i=0;i<10;i++){
-    newMarker(it[i]);
-  }
-};
 
-export {showAlert,showSuccessMessage,showErrorMessage,downloadInformation};
+export {showAlert,showSuccessMessage,showErrorMessage};

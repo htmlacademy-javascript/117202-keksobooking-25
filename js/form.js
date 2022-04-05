@@ -1,7 +1,7 @@
 import {resetPage} from './map.js';
 import {showSuccessMessage,showErrorMessage} from './util.js';
 import './map-filter.js';
-import {photoReset} from './photo-ad.js';
+import './photo-ad.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
@@ -11,7 +11,7 @@ const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
-const URL_POST = 'https://25.javascript.pages.academ/keksobooking';
+const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
 const submitButton = ADFORM.querySelector('.ad-form__submit');
 
 const deactivateFilter = function(){
@@ -94,13 +94,11 @@ const onUnitChange = function () {
 
     sliderElement.noUiSlider.updateOptions(options);}
 };
-const resetOption = function(){
-  ADFORM.reset();
+const resetOptionSlider = function(){
   const options = {
     range: { min: 1000, max:100000}, step: 100,start: 1000
   };
   sliderElement.noUiSlider.updateOptions(options);
-  photoReset();
 };
 
 ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
@@ -204,4 +202,4 @@ amountField.addEventListener('change', function () {
 sliderElement.addEventListener('click',onUbdSlider);
 
 
-export {deactivateState,activateState,pristinStart,deactivateFilter,resetOption};
+export {deactivateState,activateState,pristinStart,deactivateFilter,resetOptionSlider};

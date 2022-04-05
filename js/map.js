@@ -1,7 +1,7 @@
 import {generatorAd} from './ad.js';
-import { deactivateState,activateState,deactivateFilter,resetOption} from './form.js';
+import { deactivateState,activateState,deactivateFilter,resetOptionSlider} from './form.js';
 import {createLoader} from './server-data.js';
-import {showAlert,downloadInformation} from './util.js';
+import {showAlert} from './util.js';
 import {cleanOut} from './map-filter.js';
 
 const ADFORM = document.querySelector('.ad-form');
@@ -28,7 +28,11 @@ const mainPinMarker = L.marker({lat: 35.6827,lng: 139.7516,},{draggable: true,ic
 mainPinMarker.on('moveend', (evt) => {
   adress.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
 });
-
+const downloadInformation = function(it){
+  for(let i=0;i<10;i++){
+    newMarker(it[i]);
+  }
+};
 const dataMap = createLoader(downloadInformation,onError);
 const map = L.map('map-canvas').on('load', () => {
   activateState();
@@ -47,8 +51,11 @@ const resetPage = function() {
     lat: 35.6827,
     lng: 139.7516,
   }, 10);
-  resetOption();
+  ADFORM.reset();
+  resetOptionSlider();
   setStartAdress();
+  allFilters.reset();
+  cleanOut();
 };
 const icon = L.icon({
   iconUrl: './img/pin.svg',
@@ -66,9 +73,6 @@ const newMarker = function (it){
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetPage();
-  allFilters.reset();
-  cleanOut();
-  setStartAdress();
 });
 
 export {newMarker,resetPage,markerGroup};
