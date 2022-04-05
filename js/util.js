@@ -1,3 +1,5 @@
+import {newMarker} from './map.js';
+
 const ALERT_SHOW_TIME = 5000;
 const messageFragment = document.querySelector('body');
 
@@ -31,19 +33,19 @@ const closePopup = () => {
   if (document.querySelector('.error')) {
     document.querySelector('.error').remove();
   }
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  document.removeEventListener('keydown', onPopupClick);
 };
 
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
     closePopup();
+    document.removeEventListener('keydown', onPopupEscKeydown);
   }
 };
 
 const onPopupClick = () => {
   closePopup();
+  document.removeEventListener('keydown', onPopupClick);
 };
 
 const showSuccessMessage = () => {
@@ -66,4 +68,11 @@ const showErrorMessage = (message) => {
   document.addEventListener('keydown', onPopupEscKeydown);
   document.addEventListener('click', closePopup);
 };
-export {showAlert,showSuccessMessage,showErrorMessage};
+
+const downloadInformation = function(it){
+  for(let i=0;i<10;i++){
+    newMarker(it[i]);
+  }
+};
+
+export {showAlert,showSuccessMessage,showErrorMessage,downloadInformation};

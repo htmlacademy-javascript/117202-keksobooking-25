@@ -1,29 +1,22 @@
 import {generatorAd} from './ad.js';
 import { deactivateState,activateState,deactivateFilter,resetOption} from './form.js';
 import {createLoader} from './server-data.js';
-import {showAlert} from './util.js';
+import {showAlert,downloadInformation} from './util.js';
 import {cleanOut} from './map-filter.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
 const resetButton = ADFORM.querySelector('.ad-form__reset');
 const allFilters = document.querySelector('.map__filters');
-const sliderElement = document.querySelector('.ad-form__slider');
 
 const onError = function (){
   showAlert('Ошибка сервера, перезагрузите страницу');
   deactivateFilter();
 };
-const useAdress = function(){
+const setStartAdress = function(){
   adress.value = '35.75330,139.63690';
 };
 deactivateState();
-
-const newMarker = function (it){
-  const {lat,lng} = it.location;
-  const marker = L.marker({lat,lng},{icon});
-  marker.addTo(markerGroup).bindPopup(generatorAd(it));
-};
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -36,6 +29,15 @@ mainPinMarker.on('moveend', (evt) => {
   adress.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
 });
 
+const dataMap = createLoader(downloadInformation,onError);
+const map = L.map('map-canvas').on('load', () => {
+  activateState();
+  dataMap();
+  setStartAdress();
+}).setView({lat: 35.7533,lng: 139.6369,}, 10);
+mainPinMarker.addTo(map);
+const markerGroup = L.layerGroup().addTo(map);
+
 const resetPage = function() {
   mainPinMarker.setLatLng({
     lat: 35.6827,
@@ -46,38 +48,27 @@ const resetPage = function() {
     lng: 139.7516,
   }, 10);
   resetOption();
-  useAdress();
+  setStartAdress();
 };
-
 const icon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-
-const downloadInformation = function(it){
-  for(let i=0;i<10;i++){
-    newMarker(it[i]);
-  }
-  useAdress();
-};
-
-const dataMap = createLoader(downloadInformation,onError);
-const map = L.map('map-canvas').on('load', () => {
-  activateState();
-  dataMap();
-}).setView({lat: 35.7533,lng: 139.6369,}, 10);
-mainPinMarker.addTo(map);
-const markerGroup = L.layerGroup().addTo(map);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+const newMarker = function (it){
+  const {lat,lng} = it.location;
+  const marker = L.marker({lat,lng},{icon});
+  marker.addTo(markerGroup).bindPopup(generatorAd(it));
+};
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetPage();
   allFilters.reset();
   cleanOut();
-  adress.value = '35.75330,139.63690';
+  setStartAdress();
 });
 
-export {newMarker,resetPage,markerGroup,downloadInformation,useAdress};
+export {newMarker,resetPage,markerGroup};
