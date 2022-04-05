@@ -1,3 +1,5 @@
+import { newMarker } from './map.js';
+
 const ALERT_SHOW_TIME = 5000;
 const messageFragment = document.querySelector('body');
 
@@ -53,6 +55,7 @@ const showSuccessMessage = () => {
   messageFragment.append(successMessage);
   document.addEventListener('keydown', onPopupEscKeydown);
   document.addEventListener('click', onPopupClick);
+
 };
 
 const showErrorMessage = (message) => {
@@ -67,5 +70,10 @@ const showErrorMessage = (message) => {
   document.addEventListener('click', closePopup);
 };
 
+const downloadInformation = function(it){
+  for(let i=0;i<10;i++){
+    newMarker(it[i]);
+  }
+};
 
-export {showAlert,showSuccessMessage,showErrorMessage};
+export {showAlert,showSuccessMessage,showErrorMessage,downloadInformation};
