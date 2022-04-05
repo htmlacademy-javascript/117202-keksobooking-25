@@ -1,7 +1,8 @@
-import {resetPage,useAdress} from './map.js';
+import {resetPage} from './map.js';
 import {showSuccessMessage,showErrorMessage} from './util.js';
 import './map-filter.js';
 import {photoReset} from './photo-ad.js';
+
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
 const MAPFILTER = document.querySelector('.map__filters');
