@@ -1,6 +1,7 @@
 import { newMarker } from './map.js';
 
 const ALERT_SHOW_TIME = 5000;
+const MAX_AD = 10;
 const messageFragment = document.querySelector('body');
 
 const showAlert = function (message) {
@@ -23,10 +24,10 @@ const showAlert = function (message) {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
 };
-const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+const isEscEvent = (evt) => (evt.key === 'Escape' || evt.key === 'Esc');
 
 
-const closePopup = () => {
+const onClosePopup = () => {
   if (document.querySelector('.success')) {
     document.querySelector('.success').remove();
   }
@@ -38,13 +39,13 @@ const closePopup = () => {
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    closePopup();
+    onClosePopup();
   }
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
 const onPopupClick = () => {
-  closePopup();
+  onClosePopup();
   document.removeEventListener('keydown', onPopupClick);
 };
 
@@ -67,11 +68,11 @@ const showErrorMessage = (message) => {
   }
   messageFragment.append(errorMessage);
   document.addEventListener('keydown', onPopupEscKeydown);
-  document.addEventListener('click', closePopup);
+  document.addEventListener('click', onClosePopup);
 };
 
 const downloadInformation = function(it){
-  for(let i=0;i<10;i++){
+  for(let i=0;i<MAX_AD;i++){
     newMarker(it[i]);
   }
 };

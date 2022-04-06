@@ -2,7 +2,9 @@ import {resetPage} from './map.js';
 import {showSuccessMessage,showErrorMessage} from './util.js';
 import './map-filter.js';
 import './photo-ad.js';
-
+const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
+const MAX_PRICE = 100000;
+const MIN_PRCIE = 1000;
 const ADFORM = document.querySelector('.ad-form');
 const FIELDSETS = ADFORM.querySelectorAll('fieldset');
 const MAPFILTER = document.querySelector('.map__filters');
@@ -11,8 +13,8 @@ const type = ADFORM.querySelector('[name="type"]');
 const amountField = ADFORM.querySelector('#price');
 const TITLE_AD = ADFORM.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
-const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
 const submitButton = ADFORM.querySelector('.ad-form__submit');
+
 
 const deactivateFilter = function(){
   MAPFILTER.classList.add('map__filters--disabled');
@@ -38,8 +40,8 @@ const activateState = function(){
   FIELDSETS.forEach((it) =>  {it.disabled = false;});
   MAPFILTER.classList.remove('map__filters--disabled');
   SELECTS.forEach((it) =>  {it.disabled = false;});
-  amountField.min = 1000;
-  amountField.max = 100000;
+  amountField.min = MIN_PRCIE;
+  amountField.max = MAX_PRICE;
 };
 
 const pristine = new Pristine(ADFORM,{
@@ -70,12 +72,12 @@ const minAmount = {
 };
 
 const validateAmount = function (value) {
-  if(parseInt(value, 10) < 100000){
+  if(parseInt(value, 10) < MAX_PRICE){
     amountField.style.border = '';
     return parseInt(value, 10) >= minAmount[type.value];}
 };
 const getAmountErrorMessage = function () {
-  if(amountField.value < 100000){
+  if(amountField.value < MAX_PRICE){
     amountField.style.border = '2px solid red';
     return `Не менее ${minAmount[type.value]} рублей`;}
   amountField.style.border = '2px solid red';
@@ -89,14 +91,14 @@ const onUnitChange = function () {
   amountField.min = minAmount[this.value];
   if (sliderElement) {
     const options = {
-      range: { min: 0, max:100000}, step: 100
+      range: { min: 0, max:MAX_PRICE}, step: 100
     };
 
     sliderElement.noUiSlider.updateOptions(options);}
 };
 const resetOptionSlider = function(){
   const options = {
-    range: { min: 1000, max:100000}, step: 100,start: 1000
+    range: { min: MIN_PRCIE, max:MAX_PRICE}, step: 100,start: 1000
   };
   sliderElement.noUiSlider.updateOptions(options);
 };
@@ -171,7 +173,7 @@ pristinStart(showSuccessMessage,showErrorMessage);
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
-    max: 100000,
+    max: MAX_PRICE,
   },
   start: 0,
   step: 1000,

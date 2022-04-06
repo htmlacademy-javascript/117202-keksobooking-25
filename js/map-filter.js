@@ -1,6 +1,9 @@
 import {markerGroup,newMarker} from './map.js';
 import { createLoader } from './server-data.js';
-
+const RERENDER_DELAY = 500;
+const HIGHT_PRICE = 50000;
+const LOW_PRICE = 10000;
+const ROOMS_WITHOUT_GUEST = 100;
 const allFilters = document.querySelector('.map__filters');
 const housingType = allFilters.querySelector('#housing-type');
 const housingPrice = allFilters.querySelector('#housing-price');
@@ -9,7 +12,6 @@ const guestNumber = allFilters.querySelector('#housing-guests');
 const featuresFieldset = allFilters.querySelector('#housing-features');
 
 
-const RERENDER_DELAY = 500;
 const debounce = function (callback, timeoutDelay = 500) {
   let timeoutId;
   return (...rest) => {
@@ -27,13 +29,13 @@ const checkType = function(it) {
 };
 const checkPrice = function(it){
   if(housingPrice.value === 'middle'){
-    return it.offer.price < 50000 && it.offer.price > 10000;
+    return it.offer.price < HIGHT_PRICE && it.offer.price > LOW_PRICE;
   }
   if(housingPrice.value === 'low'){
-    return it.offer.price < 10000;
+    return it.offer.price < LOW_PRICE;
   }
   if(housingPrice.value === 'high'){
-    return it.offer.price > 50000;
+    return it.offer.price > HIGHT_PRICE;
   }
   return true;
 };
@@ -42,7 +44,7 @@ const checkRooms = function(it) {
 };
 const checkGuest = function(it){
   if(guestNumber.value === 0){
-    return it.offer.guests.toString() === 100;
+    return it.offer.guests.toString() === ROOMS_WITHOUT_GUEST;
   }
   if(guestNumber.value === 'any'){
     return true;
@@ -90,13 +92,13 @@ const newMarkerFilter = function (it) {
   });};
 const dataFilterMap = createLoader(newMarkerFilter,onError);
 
-let cleanOut = function(){
+let onChangeFilter = function(){
   markerGroup.clearLayers();
   dataFilterMap();
 };
-cleanOut = debounce(cleanOut,RERENDER_DELAY);
+onChangeFilter = debounce(onChangeFilter,RERENDER_DELAY);
 
-allFilters.addEventListener('change',cleanOut);
-export{cleanOut};
+allFilters.addEventListener('change',onChangeFilter);
+export{onChangeFilter};
 
 

@@ -2,7 +2,7 @@ import {generatorAd} from './ad.js';
 import { deactivateState,activateState,deactivateFilter,resetOptionSlider} from './form.js';
 import {createLoader} from './server-data.js';
 import {showAlert,downloadInformation} from './util.js';
-import {cleanOut} from './map-filter.js';
+import {onChangeFilter} from './map-filter.js';
 
 const ADFORM = document.querySelector('.ad-form');
 const adress = ADFORM.querySelector('#address');
@@ -52,7 +52,7 @@ const resetPage = function() {
   resetOptionSlider();
   setStartAdress();
   allFilters.reset();
-  cleanOut();
+  onChangeFilter();
 };
 const icon = L.icon({
   iconUrl: './img/pin.svg',
