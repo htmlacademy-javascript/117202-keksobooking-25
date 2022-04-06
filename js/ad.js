@@ -1,4 +1,4 @@
-const transliteHome = {
+const HouseType = {
   flat : 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -11,7 +11,7 @@ const generatorAd = function({offer,author}) {
   adElement.querySelector('.popup__title').textContent = offer.title;
   adElement.querySelector('.popup__text--address').textContent = offer.address;
   adElement.querySelector('.popup__text--price').textContent = `${offer.price  } ₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = transliteHome[offer.type];
+  adElement.querySelector('.popup__type').textContent = HouseType[offer.type];
   adElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
   adElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   if (offer.features !== undefined){
