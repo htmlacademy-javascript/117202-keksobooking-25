@@ -4,9 +4,9 @@ import './map-filter.js';
 import './photo-ad.js';
 const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
 const MAX_PRICE = 100000;
-const MIN_PRCIE = 1000;
+const MIN_PRICE = 1000;
 const adform = document.querySelector('.ad-form');
-const fieldsets = adform.querySelectorAll('fieldset');
+const fieldset = adform.querySelectorAll('fieldset');
 const mapFilter = document.querySelector('.map__filters');
 const selects = mapFilter.querySelectorAll('select');
 const type = adform.querySelector('[name="type"]');
@@ -22,7 +22,7 @@ const deactivateFilter = () =>{
 };
 const deactivateState = () =>{
   adform.classList.add('ad-form--disabled');
-  fieldsets.forEach((it) =>  {it.disabled = true;});
+  fieldset.forEach((it) =>  {it.disabled = true;});
   deactivateFilter();
 };
 
@@ -37,10 +37,10 @@ const unblockSubmitButton = () =>{
 };
 const activateState = () =>{
   adform.classList.remove('ad-form--disabled');
-  fieldsets.forEach((it) =>  {it.disabled = false;});
+  fieldset.forEach((it) =>  {it.disabled = false;});
   mapFilter.classList.remove('map__filters--disabled');
   selects.forEach((it) =>  {it.disabled = false;});
-  amountField.min = MIN_PRCIE;
+  amountField.min = MIN_PRICE;
   amountField.max = MAX_PRICE;
 };
 
@@ -86,7 +86,7 @@ const getAmountErrorMessage = () =>{
 
 
 pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
-const onUnitChange = () =>{
+const onUnitChange = function() {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
   if (sliderElement) {
@@ -98,7 +98,7 @@ const onUnitChange = () =>{
 };
 const resetOptionSlider = () =>{
   const options = {
-    range: { min: MIN_PRCIE, max:MAX_PRICE}, step: 100,start: 1000
+    range: { min: MIN_PRICE, max:MAX_PRICE}, step: 100,start: 1000
   };
   sliderElement.noUiSlider.updateOptions(options);
 };

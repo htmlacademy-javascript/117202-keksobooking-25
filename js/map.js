@@ -5,7 +5,7 @@ import {showAlert,downloadInformation} from './util.js';
 import {onChangeFilter} from './map-filter.js';
 
 const adform = document.querySelector('.ad-form');
-const adress = adform.querySelector('#address');
+const address = adform.querySelector('#address');
 const resetButton = adform.querySelector('.ad-form__reset');
 const allFilters = document.querySelector('.map__filters');
 
@@ -14,7 +14,7 @@ const onError = () =>{
   showAlert('Ошибка сервера, перезагрузите страницу');
   deactivateFilter();
 };
-const setStartAdress = () =>{adress.value = '35.75330,139.63690';};
+const setStartAddress = () =>{address.value = '35.75330,139.63690';};
 deactivateState();
 
 const mainPinIcon = L.icon({
@@ -25,14 +25,14 @@ const mainPinIcon = L.icon({
 
 const mainPinMarker = L.marker({lat: 35.6827,lng: 139.7516,},{draggable: true,icon: mainPinIcon,},);
 mainPinMarker.on('moveend', (evt) => {
-  adress.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
+  address.value = Object.values(evt.target.getLatLng()).map((element) => element.toFixed(5)).join(',');
 });
 
 const dataMap = createLoader(downloadInformation,onError);
 const map = L.map('map-canvas').on('load', () => {
   activateState();
   dataMap();
-  setStartAdress();
+  setStartAddress();
 }).setView({lat: 35.7533,lng: 139.6369,}, 10);
 mainPinMarker.addTo(map);
 const markerGroup = L.layerGroup().addTo(map);
@@ -48,7 +48,7 @@ const resetPage = () =>{
   }, 10);
   adform.reset();
   resetOptionSlider();
-  setStartAdress();
+  setStartAddress();
   allFilters.reset();
   onChangeFilter();
 };

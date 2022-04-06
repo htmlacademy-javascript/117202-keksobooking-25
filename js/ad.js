@@ -26,19 +26,19 @@ const generateAd = ({offer,author}) =>{
   if (offer.description !== undefined){
     adElement.querySelector('.popup__description').textContent = offer.description;}
   if (offer.photos !== undefined){
-    const tamplateForm = adElement.querySelector('.popup__photos');
-    const tamplateTag = tamplateForm.querySelector('img');
-    const cloneImage = tamplateTag.cloneNode(true);
-    tamplateTag.remove();
+    const templateForm = adElement.querySelector('.popup__photos');
+    const templateTag = templateForm.querySelector('img');
+    const cloneImage = templateTag.cloneNode(true);
+    templateTag.remove();
     for (let i = 0; i <= offer.photos.length-1; i++){
       const newImage = cloneImage.cloneNode(true);
       newImage.src = offer.photos[i];
-      tamplateForm.appendChild(newImage);
+      templateForm.appendChild(newImage);
     }
   }
   if (author.avatar !== undefined){
-    const tamplateAvatar = adElement.querySelector('img');
-    tamplateAvatar.src = author.avatar;
+    const templateAvatar = adElement.querySelector('img');
+    templateAvatar.src = author.avatar;
   }
   return adElement;
 };
