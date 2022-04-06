@@ -5,8 +5,9 @@ const HouseType = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
+
 const adUser = document.querySelector('#card').content.querySelector('article');
-const generatorAd = function({offer,author}) {
+const generateAd = ({offer,author}) =>{
   const adElement = adUser.cloneNode(true);
   adElement.querySelector('.popup__title').textContent = offer.title;
   adElement.querySelector('.popup__text--address').textContent = offer.address;
@@ -43,5 +44,5 @@ const generatorAd = function({offer,author}) {
 };
 
 
-export {generatorAd,adUser};
+export {generateAd,adUser};
 

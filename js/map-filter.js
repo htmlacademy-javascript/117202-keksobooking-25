@@ -20,14 +20,10 @@ const debounce = function (callback, timeoutDelay = 500) {
   };
 };
 
-const onError = function(){
-  return 'ошибка';
-};
+const onError = () =>'ошибка';
 
-const checkType = function(it) {
-  return it.offer.type === housingType.value || housingType.value === 'any';
-};
-const checkPrice = function(it){
+const checkType = (it) =>it.offer.type === housingType.value || housingType.value === 'any';
+const checkPrice = (it) =>{
   if(housingPrice.value === 'middle'){
     return it.offer.price < HIGHT_PRICE && it.offer.price > LOW_PRICE;
   }
@@ -39,10 +35,8 @@ const checkPrice = function(it){
   }
   return true;
 };
-const checkRooms = function(it) {
-  return (roomsNumber.value === it.offer.rooms.toString() || roomsNumber.value === 'any');
-};
-const checkGuest = function(it){
+const checkRooms = (it) =>(roomsNumber.value === it.offer.rooms.toString() || roomsNumber.value === 'any');
+const checkGuest = (it) =>{
   if(guestNumber.value === 0){
     return it.offer.guests.toString() === ROOMS_WITHOUT_GUEST;
   }
@@ -52,7 +46,7 @@ const checkGuest = function(it){
   return(guestNumber.value === it.offer.guests.toString());
 };
 
-const checkFeatures = function (it, checkedFeaturesItems) {
+const checkFeatures = (it,checkedFeaturesItems) =>{
   let featuresIn = true;
   if (checkedFeaturesItems.length === 0) {
     return featuresIn;
@@ -71,7 +65,7 @@ const checkFeatures = function (it, checkedFeaturesItems) {
   return featuresIn;
 };
 
-const newMarkerFilter = function (it) {
+const newMarkerFilter = (it) =>{
   const result = [];
   const checkedFeaturesItems = featuresFieldset.querySelectorAll('input:checked');
   for (let i = 0; i < it.length; i++) {
@@ -92,7 +86,7 @@ const newMarkerFilter = function (it) {
   });};
 const dataFilterMap = createLoader(newMarkerFilter,onError);
 
-let onChangeFilter = function(){
+let onChangeFilter = () =>{
   markerGroup.clearLayers();
   dataFilterMap();
 };

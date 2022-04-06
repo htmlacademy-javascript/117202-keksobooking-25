@@ -1,22 +1,20 @@
-import {generatorAd} from './ad.js';
+import {generateAd} from './ad.js';
 import { deactivateState,activateState,deactivateFilter,resetOptionSlider} from './form.js';
 import {createLoader} from './server-data.js';
 import {showAlert,downloadInformation} from './util.js';
 import {onChangeFilter} from './map-filter.js';
 
-const ADFORM = document.querySelector('.ad-form');
-const adress = ADFORM.querySelector('#address');
-const resetButton = ADFORM.querySelector('.ad-form__reset');
+const adform = document.querySelector('.ad-form');
+const adress = adform.querySelector('#address');
+const resetButton = adform.querySelector('.ad-form__reset');
 const allFilters = document.querySelector('.map__filters');
 
 
-const onError = function (){
+const onError = () =>{
   showAlert('Ошибка сервера, перезагрузите страницу');
   deactivateFilter();
 };
-const setStartAdress = function(){
-  adress.value = '35.75330,139.63690';
-};
+const setStartAdress = () =>{adress.value = '35.75330,139.63690';};
 deactivateState();
 
 const mainPinIcon = L.icon({
@@ -39,7 +37,7 @@ const map = L.map('map-canvas').on('load', () => {
 mainPinMarker.addTo(map);
 const markerGroup = L.layerGroup().addTo(map);
 
-const resetPage = function() {
+const resetPage = () =>{
   mainPinMarker.setLatLng({
     lat: 35.6827,
     lng: 139.7516,
@@ -48,7 +46,7 @@ const resetPage = function() {
     lat: 35.6827,
     lng: 139.7516,
   }, 10);
-  ADFORM.reset();
+  adform.reset();
   resetOptionSlider();
   setStartAdress();
   allFilters.reset();
@@ -61,10 +59,10 @@ const icon = L.icon({
 });
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
-const newMarker = function (it){
+const newMarker = (it) =>{
   const {lat,lng} = it.location;
   const marker = L.marker({lat,lng},{icon});
-  marker.addTo(markerGroup).bindPopup(generatorAd(it));
+  marker.addTo(markerGroup).bindPopup(generateAd(it));
 };
 
 resetButton.addEventListener('click', (evt) => {
