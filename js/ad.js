@@ -5,8 +5,9 @@ const HouseType = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
+
 const adUser = document.querySelector('#card').content.querySelector('article');
-const generatorAd = function({offer,author}) {
+const generateAd = ({offer,author}) =>{
   const adElement = adUser.cloneNode(true);
   adElement.querySelector('.popup__title').textContent = offer.title;
   adElement.querySelector('.popup__text--address').textContent = offer.address;
@@ -25,23 +26,23 @@ const generatorAd = function({offer,author}) {
   if (offer.description !== undefined){
     adElement.querySelector('.popup__description').textContent = offer.description;}
   if (offer.photos !== undefined){
-    const tamplateForm = adElement.querySelector('.popup__photos');
-    const tamplateTag = tamplateForm.querySelector('img');
-    const cloneImage = tamplateTag.cloneNode(true);
-    tamplateTag.remove();
+    const templateForm = adElement.querySelector('.popup__photos');
+    const templateTag = templateForm.querySelector('img');
+    const cloneImage = templateTag.cloneNode(true);
+    templateTag.remove();
     for (let i = 0; i <= offer.photos.length-1; i++){
       const newImage = cloneImage.cloneNode(true);
       newImage.src = offer.photos[i];
-      tamplateForm.appendChild(newImage);
+      templateForm.appendChild(newImage);
     }
   }
   if (author.avatar !== undefined){
-    const tamplateAvatar = adElement.querySelector('img');
-    tamplateAvatar.src = author.avatar;
+    const templateAvatar = adElement.querySelector('img');
+    templateAvatar.src = author.avatar;
   }
   return adElement;
 };
 
 
-export {generatorAd,adUser};
+export {generateAd,adUser};
 

@@ -4,47 +4,47 @@ import './map-filter.js';
 import './photo-ad.js';
 const URL_POST = 'https://25.javascript.pages.academy/keksobooking';
 const MAX_PRICE = 100000;
-const MIN_PRCIE = 1000;
-const ADFORM = document.querySelector('.ad-form');
-const FIELDSETS = ADFORM.querySelectorAll('fieldset');
-const MAPFILTER = document.querySelector('.map__filters');
-const SELECTS = MAPFILTER.querySelectorAll('select');
-const type = ADFORM.querySelector('[name="type"]');
-const amountField = ADFORM.querySelector('#price');
-const TITLE_AD = ADFORM.querySelector('#title');
+const MIN_PRICE = 1000;
+const adform = document.querySelector('.ad-form');
+const fieldset = adform.querySelectorAll('fieldset');
+const mapFilter = document.querySelector('.map__filters');
+const selects = mapFilter.querySelectorAll('select');
+const type = adform.querySelector('[name="type"]');
+const amountField = adform.querySelector('#price');
+const titleAd = adform.querySelector('#title');
 const sliderElement = document.querySelector('.ad-form__slider');
-const submitButton = ADFORM.querySelector('.ad-form__submit');
+const submitButton = adform.querySelector('.ad-form__submit');
 
 
-const deactivateFilter = function(){
-  MAPFILTER.classList.add('map__filters--disabled');
-  SELECTS.forEach((it) =>  {it.disabled = true;});
+const deactivateFilter = () =>{
+  mapFilter.classList.add('map__filters--disabled');
+  selects.forEach((it) =>  {it.disabled = true;});
 };
-const deactivateState = function(){
-  ADFORM.classList.add('ad-form--disabled');
-  FIELDSETS.forEach((it) =>  {it.disabled = true;});
+const deactivateState = () =>{
+  adform.classList.add('ad-form--disabled');
+  fieldset.forEach((it) =>  {it.disabled = true;});
   deactivateFilter();
 };
 
-const blockSubmitButton = function () {
+const blockSubmitButton = () =>{
   submitButton.disabled = true;
   submitButton.textContent = 'Публикую...';
 };
 
-const unblockSubmitButton = function () {
+const unblockSubmitButton = () =>{
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
 };
-const activateState = function(){
-  ADFORM.classList.remove('ad-form--disabled');
-  FIELDSETS.forEach((it) =>  {it.disabled = false;});
-  MAPFILTER.classList.remove('map__filters--disabled');
-  SELECTS.forEach((it) =>  {it.disabled = false;});
-  amountField.min = MIN_PRCIE;
+const activateState = () =>{
+  adform.classList.remove('ad-form--disabled');
+  fieldset.forEach((it) =>  {it.disabled = false;});
+  mapFilter.classList.remove('map__filters--disabled');
+  selects.forEach((it) =>  {it.disabled = false;});
+  amountField.min = MIN_PRICE;
   amountField.max = MAX_PRICE;
 };
 
-const pristine = new Pristine(ADFORM,{
+const pristine = new Pristine(adform,{
   classTo: 'ad-form__element' ,
   errorClass: 'ad-form__element--invalid',
   successClass: 'ad-form__element--valid',
@@ -53,15 +53,15 @@ const pristine = new Pristine(ADFORM,{
   errorTextClass: 'error__message--text' ,
 });
 
-const validateTitle = function (value) {
-  TITLE_AD.style.border = '';
+const validateTitle = (value) => {
+  titleAd.style.border = '';
   return value.length >= 30 && value.length <= 100;
 };
-const errorValidateTitle = function (){
-  TITLE_AD.style.border = '2px solid red';
+const errorValidateTitle = () =>{
+  titleAd.style.border = '2px solid red';
   return 'От 30 до 100 символов';
 };
-pristine.addValidator(TITLE_AD,validateTitle,errorValidateTitle);
+pristine.addValidator(titleAd,validateTitle,errorValidateTitle);
 
 const minAmount = {
   'bungalow': 0,
@@ -71,12 +71,12 @@ const minAmount = {
   'palace': 10000
 };
 
-const validateAmount = function (value) {
+const validateAmount = (value) =>{
   if(parseInt(value, 10) < MAX_PRICE){
     amountField.style.border = '';
     return parseInt(value, 10) >= minAmount[type.value];}
 };
-const getAmountErrorMessage = function () {
+const getAmountErrorMessage = () =>{
   if(amountField.value < MAX_PRICE){
     amountField.style.border = '2px solid red';
     return `Не менее ${minAmount[type.value]} рублей`;}
@@ -86,7 +86,7 @@ const getAmountErrorMessage = function () {
 
 
 pristine.addValidator(amountField, validateAmount ,getAmountErrorMessage);
-const onUnitChange = function () {
+const onUnitChange = function() {
   amountField.placeholder = minAmount[this.value];
   amountField.min = minAmount[this.value];
   if (sliderElement) {
@@ -96,17 +96,17 @@ const onUnitChange = function () {
 
     sliderElement.noUiSlider.updateOptions(options);}
 };
-const resetOptionSlider = function(){
+const resetOptionSlider = () =>{
   const options = {
-    range: { min: MIN_PRCIE, max:MAX_PRICE}, step: 100,start: 1000
+    range: { min: MIN_PRICE, max:MAX_PRICE}, step: 100,start: 1000
   };
   sliderElement.noUiSlider.updateOptions(options);
 };
 
-ADFORM.querySelector('[name="type"]').addEventListener('change', onUnitChange);
+adform.querySelector('[name="type"]').addEventListener('change', onUnitChange);
 
-const rooms = ADFORM.querySelector('[name="rooms"]');
-const capacitys = ADFORM.querySelector('[name="capacity"]');
+const rooms = adform.querySelector('[name="rooms"]');
+const capacitys = adform.querySelector('[name="capacity"]');
 const roomsOption = {
   '1': ['1'],
   '2': ['1', '2'],
@@ -114,12 +114,12 @@ const roomsOption = {
   '100': ['0']
 };
 
-const validateRoom = function () {
+const validateRoom = () =>{
   capacitys.style.border = '';
   return roomsOption[rooms.value].includes(capacitys.value);
 };
 
-const getDeliveryErrorMessage = function () {
+const getDeliveryErrorMessage = () =>{
   capacitys.style.border = '2px solid red';
   if (rooms.value !== '100' && capacitys.value !== '0'){return `для ${capacitys.value}-х гостей необходимо ${capacitys.value} комнаты`;}
   if (rooms.value === '100'){return '100 комнат для гостей не доступно';}
@@ -128,8 +128,8 @@ const getDeliveryErrorMessage = function () {
 
 };
 
-const timeInForm = ADFORM.querySelector('[name="timein"]');
-const timeOutForm = ADFORM.querySelector('[name="timeout"]');
+const timeInForm = adform.querySelector('[name="timein"]');
+const timeOutForm = adform.querySelector('[name="timeout"]');
 
 timeInForm.addEventListener('change', () => {
   timeOutForm.value = timeInForm.value;
@@ -140,8 +140,8 @@ timeOutForm.addEventListener('change', () => {
 
 pristine.addValidator(capacitys, validateRoom, getDeliveryErrorMessage);
 
-const pristinStart = function(onSuccess,onError) {
-  ADFORM.addEventListener('submit', (evt) => {
+const pristinStart = (onSuccess,onError) =>{
+  adform.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
@@ -155,7 +155,7 @@ const pristinStart = function(onSuccess,onError) {
       ).then((response) => {
         if (response.ok) {
           onSuccess();
-          ADFORM.reset();
+          adform.reset();
           resetPage();
           unblockSubmitButton();}
         else{
@@ -191,7 +191,7 @@ noUiSlider.create(sliderElement, {
   },
 });
 
-const onUbdSlider = function(){
+const onUbdSlider = () =>{
   sliderElement.noUiSlider.on('update', () => {
     amountField.value = sliderElement.noUiSlider.get();
   });

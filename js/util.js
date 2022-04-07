@@ -71,7 +71,7 @@ const showErrorMessage = (message) => {
   document.addEventListener('click', onClosePopup);
 };
 
-const downloadInformation = function(it){
+const downloadInformation = (it) =>{
   for(let i=0;i<MAX_AD;i++){
     newMarker(it[i]);
   }
